@@ -1,13 +1,19 @@
 # Makefile for toolkit
 
+BENCH = ~/bench
+
+TKDIR = $(BENCH)/toolkit
+
 CC = gcc
-CFLAGS = -g3 -O0 -Wall -Wextra
+CFLAGS = -g3 -O0 -Wall -Wextra -I $(TKDIR) -L $(TKDIR) -ltoolkit
 
 ARGS =
 
 INSTALDIR = 
 
-all: toolkit.o filetools.o txtools.o
+TSTDIR = $(BENCH)/tests
+
+all: toolkit.o filetools.o txtools.o config.o
 
 run:
 	./toolkit $(ARGS)
@@ -24,17 +30,24 @@ uninstall: $(INSTALDIR)/toolkit
 toolkit.lib: txtools.o filetools.o toolkit.o
 	ar rcs $@ $^
 
+config.o: config.c config.h
+
+config: config.o toolkit.o filetools.o 
+
 txtools.o: txtools.c txtools.h
 
 filetools.o: filetools.c filetools.h
 
 toolkit.o: toolkit.c toolkit.h
 
-tst_txtools: txtools.o
+TESTS: $(TSTDIR)/tst_txtools $(TSTDIR)/tst_filetools $(TSTDIR)/tst_toolkit
 
-tst_filetools: filetools.o
+$(TSTDIR)/tst_txtools: $(TSTDIR)/tst_txtools.c $(TKDIR)/toolkit.lib
 
-tst_toolkit: toolkit.o
+
+$(TSTDIR)/tst_filetools: $(TSTDIR)/tst_filetools.c $(TKDIR)/toolkit.lib
+
+$(TSTDIR)/tst_toolkit: $(TSTDIR)/tst_toolkit.c $(TKDIR)/toolkit.lib
 
 .PHONY: clean
 clean:

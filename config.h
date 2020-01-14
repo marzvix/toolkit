@@ -1,9 +1,10 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-void create_config(char *);
-void load_config(char *);
-void dump_config(char *);
-void remove_config(char *);
+void create_config(void);
+void load_config(void);
+void save_config(void);
+void dump_config(void);
+void remove_config(void);
 
 #endif /* _CONFIG_H */

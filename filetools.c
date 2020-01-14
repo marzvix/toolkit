@@ -28,9 +28,11 @@ int isdir(char *dirpath)
 	  );
 }
 
-int exist(char *dirpath) /* just a wrapper */
+int exist(char *path) /* just a wrapper */
 {
-  return (isdir(dirpath));
+  //  printf("checando se %s existe: %d, %d, d||d (%d)\n", path, isdir(path) , isfile(path), (isdir(path) || isfile(path)));
+    
+  return (isdir(path) || isfile(path));
 }
 
 int create_file(char *filename)
@@ -48,6 +50,15 @@ int create_file(char *filename)
 int remove_file(char *filename)
 {
   return remove(filename);
+}
+
+int isfile(char *filepath)
+{
+  status = stat(filepath, &statbuffer);
+  return (
+	  (status == 0) &&  /* path exist */
+	  S_ISREG(statbuffer.st_mode)  /* is a file */
+	  );
 }
 
 int getfsize(char *filename, long *size)
